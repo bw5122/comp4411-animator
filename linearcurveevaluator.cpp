@@ -44,4 +44,8 @@ void LinearCurveEvaluator::evaluateCurve(const std::vector<Point>& ptvCtrlPts,
 		y2 = ptvCtrlPts[iCtrlPtCount - 1].y;
 
 	ptvEvaluatedCurvePts.push_back(Point(x, y2));
+	//for (std::vector<Point>::iterator it = ptvEvaluatedCurvePts.begin(); it != ptvEvaluatedCurvePts.end(); it++)
+	//{
+		//printf("x",it->x);
+	//}
 }

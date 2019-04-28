@@ -62,6 +62,7 @@ public:
   Fl_Light_Button *m_pbtSimulate;
   Fl_Value_Slider *m_psldrFPS;
   IndicatorWindow *m_pwndIndicatorWnd;
+  Fl_Slider *m_TensionSlider;
   Fl_Slider *m_psldrTimeSlider;
   Fl_Slider *m_psldrPlayStart;
   Fl_Slider *m_psldrPlayEnd;
