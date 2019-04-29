@@ -102,6 +102,9 @@
     <ClCompile Include="robotarm.cpp">
       <Filter>Source Files\Model</Filter>
     </ClCompile>
+    <ClCompile Include="force.cpp">
+      <Filter>Source Files\Particles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="curve.h">
@@ -166,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="IK.h">
       <Filter>Header Files\Model.</Filter>
+    </ClInclude>
+    <ClInclude Include="force.h">
+      <Filter>Header Files\Particles.</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

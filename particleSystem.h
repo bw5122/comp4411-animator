@@ -17,6 +17,8 @@
 #define __PARTICLE_SYSTEM_H__
 
 #include "vec.h"
+#include "particle.h"
+#include "force.h"
 
 
 
@@ -27,7 +29,7 @@ public:
 
 
 	/** Constructor **/
-	ParticleSystem();
+	ParticleSystem(double g, double k);
 
 
 	/** Destructor **/
@@ -62,7 +64,8 @@ public:
 	// of baked particles (without leaking memory).
 	virtual void clearBaked();	
 
-
+	void SpawnParticles(Vec3d pos, int num);
+	bool isBakedAt(float t);
 
 	// These accessor fxns are implemented for you
 	float getBakeStartTime() { return bake_start_time; }
@@ -77,6 +80,10 @@ public:
 protected:
 	
 
+	float currentT;
+	vector<Particle> particles;
+	vector<Force*> forces;
+	map<float, vector<Particle>> bakeInfo;
 
 	/** Some baking-related state **/
 	float bake_fps;						// frame rate at which simulation was baked

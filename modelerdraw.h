@@ -7,6 +7,7 @@
 
 #include <FL/gl.h>
 #include <cstdio>
+#include "mat.h"
 
 
 enum DrawModeSetting_t 
@@ -93,6 +94,8 @@ void drawTriangle( double x1, double y1, double z1,
 			       double x3, double y3, double z3 );
 
 void drawRectangularPyramid(double r, double h);
+
+Mat4d getModelViewMatrix();
 
 
 #endif

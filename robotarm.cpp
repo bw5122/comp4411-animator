@@ -5,6 +5,7 @@
 #include "modelerdraw.h"
 #include "particleSystem.h"
 #include "IK.h"
+#include "mat.h"
 #include <FL/gl.h>
 #include <math.h>
 
@@ -14,7 +15,7 @@ enum SampleModelControls
 	UPPER_BODY_ROTATE,
 	LEFT_ARM_ROTATE, RIGHT_ARM_ROTATE,
 	LEFT_FORE_ARM_ROTATE_X, LEFT_FORE_ARM_ROTATE_Y, RIGHT_FORE_ARM_ROTATE,
-	HEAD_ROTATE, Level_Of_DETAILs, Torus, CrazyShoulders, ENABLEIK, IK_X, IK_Y, IK_Z, LEGCONSTRAINT, LSYSTEM, LSYSTEMLEVEL, Mood, Organic_Shape, Show_Texture, LIGHT_CONDITION,
+	HEAD_ROTATE, Level_Of_DETAILs, Torus, CrazyShoulders, ENABLEIK, IK_X, IK_Y, IK_Z, LEGCONSTRAINT, LSYSTEM, LSYSTEMLEVEL, Mood, Organic_Shape, Show_Texture, LIGHT_CONDITION, PARTICLE_NUM,
 	NUMCONTROLS
 };
 
@@ -53,6 +54,14 @@ public:
 	void initRecurtionTree();
 	float* getRotateAngles(Vec3f target);
 	InverseKinematics2* rightLeg;
+
+	void drawParticles(Mat4d CameraMatrix, int num)
+	{
+		Mat4d WorldMatrix = CameraMatrix.inverse() * getModelViewMatrix();
+		Vec4d pos = WorldMatrix * Vec4d(0.5, 1, -2, 1);
+		ParticleSystem *ps = ModelerApplication::Instance()->GetParticleSystem();
+		ps->SpawnParticles(Vec3d(pos[0], pos[1], pos[2]), num);
+	}
 };
 
 // We need to make a creator function, mostly because of
@@ -73,7 +82,7 @@ void SampleModel::draw()
 	// matrix stuff.  Unless you want to fudge directly with the 
 	// projection matrix, don't bother with this ...
 	ModelerView::draw();
-
+	Mat4d CameraMatrix = getModelViewMatrix();
 
 
 	if (VAL(LIGHT_CONDITION)) {
@@ -145,6 +154,9 @@ void SampleModel::draw()
 
 
 	drawCylinder(1.5, 1, 1.5);
+	//Particle System
+	drawParticles(CameraMatrix, VAL(PARTICLE_NUM));
+
 
 	glRotated(-90, 1, 0, 0);
 	glTranslated(0, -5.5, 0);
@@ -422,6 +434,8 @@ void SampleModel::draw()
 	}
 	glPopMatrix();
 
+	endDraw();
+
 }
 
 
@@ -470,6 +484,13 @@ int main()
 	controls[Show_Texture] = ModelerControl("Texture", 0, 1, 1, 0);
 	controls[LIGHT_CONDITION] = ModelerControl("Light Condition", 0, 1, 1, 0);
 
+	controls[PARTICLE_NUM] = ModelerControl("Number of particel", 0, 50, 1, 5);
+
+	// You should create a ParticleSystem object ps here and then
+	// call ModelerApplication::Instance()->SetParticleSystem(ps)
+	// to hook it up to the animator interface.
+	ParticleSystem *ps = new ParticleSystem(5, 0.1);
+	ModelerApplication::Instance()->SetParticleSystem(ps);
 
 	ModelerApplication::Instance()->Init(&createSampleModel, controls, NUMCONTROLS);
 	return ModelerApplication::Instance()->Run();
@@ -551,6 +572,7 @@ glPopMatrix();//left leg joint end
 
 }
 */
+
 void SampleModel::drawThigh() {
 
 
