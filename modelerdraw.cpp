@@ -414,7 +414,6 @@ void drawTriangle( double x1, double y1, double z1,
         glEnd();
     }
 }
-
 void drawRectangularPyramid(double r, double h)
 {
 	drawTriangle(0, 0, 0, 0, 0, r, r, 0, r);

@@ -125,6 +125,10 @@ ModelerUIWindows::ModelerUIWindows() {
             o->labelsize(12);
             o->user_data((void*)(this));
           }
+		  { Fl_Slider* o = m_TensionSlider = new Fl_Slider(230, 495, 120, 20);
+		  o->type(5);
+		  o->user_data((void*)(this));
+		  }
           { Fl_Button* o = m_pbtZoomAll = new Fl_Button(505, 470, 75, 20, "Z&oom All");
             o->labelsize(12);
             o->user_data((void*)(this));
