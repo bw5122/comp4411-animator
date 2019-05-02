@@ -30,6 +30,9 @@ enum SampleModelControls
 #define COLOR_GOLD      1.0f, 0.84f, 0.44f
 #define VAL(x) (ModelerApplication::Instance()->GetControlValue(x))
 
+double prevX = 0.0; //for calculating speed X
+double t = 0.03;
+double curSpeedX = 0.0;
 
 // To make a SampleModel, we inherit off of ModelerView
 class SampleModel : public ModelerView
@@ -58,9 +61,17 @@ public:
 	void drawParticles(Mat4d CameraMatrix, int num)
 	{
 		Mat4d WorldMatrix = CameraMatrix.inverse() * getModelViewMatrix();
-		Vec4d pos = WorldMatrix * Vec4d(0.5, 1, -2, 1);
+		Mat4d modelMat = getModelViewMatrix();
+		curSpeedX = (VAL(XPOS) - prevX) / t;
+		prevX = VAL(XPOS);
+		//Vec4d pos = WorldMatrix * Vec4d(0, 10, 0, 1);
+		//Vec4d pos = WorldMatrix * Vec4d(0.5, 1, -2, 1); work for upper body
+		cout << "model " << modelMat.n[0] << " " << modelMat.n[1] << " " << modelMat.n[2] << endl;
+		cout << "cam "<<CameraMatrix.n[0] <<" "<< CameraMatrix.n[1] << " " << CameraMatrix.n[2] << endl;
+		cout << "world "<<WorldMatrix.n[0] << " " << WorldMatrix.n[1] << " " << WorldMatrix.n[2] << endl;
+		Vec4d pos = WorldMatrix * Vec4d(1, 8.5, 1, 1);
 		ParticleSystem *ps = ModelerApplication::Instance()->GetParticleSystem();
-		ps->SpawnParticles(Vec3d(pos[0], pos[1], pos[2]), num);
+		ps->SpawnParticles(Vec3d(pos[0], pos[1], pos[2]), curSpeedX, num);
 	}
 };
 
@@ -83,7 +94,7 @@ void SampleModel::draw()
 	// projection matrix, don't bother with this ...
 	ModelerView::draw();
 	Mat4d CameraMatrix = getModelViewMatrix();
-
+	
 
 	if (VAL(LIGHT_CONDITION)) {
 		static GLfloat lightPosition2[] = { 1, 5, 2, 1 };
@@ -143,6 +154,7 @@ void SampleModel::draw()
 	setDiffuseColor(COLOR_GREEN);
 	glPushMatrix();
 	glTranslated(VAL(XPOS), VAL(YPOS), VAL(ZPOS));
+	//cout << CameraMatrix[0] << CameraMatrix[1] << CameraMatrix[2] << endl;
 
 	glPushMatrix(); // Upper body draw begin
 	glRotated(VAL(UPPER_BODY_ROTATE) + additionAngel, 0.0, 1.0, 0.0);
@@ -155,12 +167,11 @@ void SampleModel::draw()
 
 	drawCylinder(1.5, 1, 1.5);
 	//Particle System
-	drawParticles(CameraMatrix, VAL(PARTICLE_NUM));
-
-
+	//cout << CameraMatrix[0] << CameraMatrix[1] << CameraMatrix[2] <<endl;
 	glRotated(-90, 1, 0, 0);
 	glTranslated(0, -5.5, 0);
 	glPopMatrix(); //  chest draw ends
+	
 
 	if (VAL(Level_Of_DETAILs) > 1) {
 		glPushMatrix(); // neck draw begin
@@ -200,8 +211,10 @@ void SampleModel::draw()
 				//drawTorus();
 			}
 			//glRotated(-90, 1, 0, 0);
+			
 			glTranslated(0.25, -8.5, 0.25);
 		}
+		
 		glPopMatrix(); //  head draw ends
 	}
 	//drawCylinder(1, 0.3, 0.3);
@@ -347,10 +360,9 @@ void SampleModel::draw()
 	}
 	glTranslated(1.4, -5.5, 0);
 	glPopMatrix(); //  right arm ends
-
-
-
+	drawParticles(CameraMatrix, VAL(PARTICLE_NUM));
 	glPopMatrix(); // upper body draw end
+	
 
 
 	glPushMatrix(); // lower body draw begin

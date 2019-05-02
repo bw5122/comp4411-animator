@@ -21,7 +21,6 @@
 #include "force.h"
 
 
-
 class ParticleSystem {
 
 public:
@@ -64,7 +63,7 @@ public:
 	// of baked particles (without leaking memory).
 	virtual void clearBaked();	
 
-	void SpawnParticles(Vec3d pos, int num);
+	void SpawnParticles(Vec3d pos, double curSpeedX, int num);
 	bool isBakedAt(float t);
 
 	// These accessor fxns are implemented for you

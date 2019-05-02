@@ -158,8 +158,9 @@ bool ParticleSystem::isBakedAt(float t)
 
 
 
-void ParticleSystem::SpawnParticles(Vec3d pos, int num)
+void ParticleSystem::SpawnParticles(Vec3d pos, double curSpeedX, int num)
 {
+	cout << "cur speed x "<<curSpeedX << endl;
 	if (isSimulate())
 	{
 		if (!isBakedAt(currentT + bake_fps))
@@ -173,7 +174,8 @@ void ParticleSystem::SpawnParticles(Vec3d pos, int num)
 				double zSpeed = -(rand() % 10 / 10.0 + 5);
 				// double ySpeed = cos(theta) * F;
 				// double xSpeed = sin(theta) * F;
-				double ySpeed = 0;
+				//double ySpeed = 0;
+				double ySpeed = curSpeedX;
 				double xSpeed = -(rand() % 10 / 10.0) + 0.5;
 				p.setSpeed(Vec3d(xSpeed, ySpeed, zSpeed));
 				for (std::vector<Force*>::iterator it = forces.begin(); it != forces.end(); it++)
